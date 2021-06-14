@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Product_image;
 use App\Models\Shop;
 use Illuminate\Http\Request;
+use File;
+use Illuminate\Database\QueryException;
 
 class ProductController extends Controller
 {
@@ -64,12 +67,8 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $values = array_except($request->all(), ['_token','image','price_after_discount','status']);
-        if($request->hasFile('image'))
-        {
-           $product_image=$request->file('image');
-  
-           $values['image'] = $this->UplaodImage($product_image);
+        $values = array_except($request->all(), ['_token','price_after_discount','status']);
+      
            $values['price_after_discount'] =  $values['price']- $values['discount'];
            if($request->input('status') == 1){
             $values['status'] = 1;   
@@ -77,7 +76,7 @@ class ProductController extends Controller
             $values['status'] = 0;      
            }
 
-        }
+     
         $this->object::create($values);
         return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
     }
@@ -101,7 +100,14 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $row = Product::where('id', '=', $id)->first();
+        $brands=Brand::all();
+        $categories=Category::whereNotNull('parent_category_id')->get();
+        $shops=Shop::all();
+        //slide image
+        $slideImages=Product_image::where('product_id','=',$id)->get();
+
+        return view($this->viewName . 'edit', compact('row','brands','categories','shops','slideImages'));
     }
 
     /**
@@ -149,5 +155,58 @@ class ProductController extends Controller
 		$file->move($uploadPath, $imageName);
        
 		return $imageName;
+    }
+
+
+    public function storeProductImage(Request $request){
+        $values = array_except($request->all(), ['_token','image']);
+      
+        if($request->hasFile('image'))
+        {
+           $product_image=$request->file('image');
+  
+           $values['image'] = $this->UplaodImage($product_image);
+
+        }
+       Product_image::create($values);
+        return redirect()->back()->with('flash_success', $this->message);
+    }
+
+
+    public function updateProductImage(Request $request){
+
+        $values = array_except($request->all(), ['_token','image','product_id','product_image_id']);
+      
+        if($request->hasFile('image'))
+        {
+           $product_image=$request->file('image');
+  
+           $values['image'] = $this->UplaodImage($product_image);
+
+        }
+        Product_image::findOrFail($request->input('product_image_id'))->update($values);
+        return redirect()->back()->with('flash_success', $this->message);
+    }
+
+
+    public function deleteProductImage(Request $request){
+\Log::info("message");
+       $row=Product_image::where('id','=',$request->input('product_image_id'))->first();
+
+       $file = $row->image;
+      
+        $file_name = public_path('uploads/product/'.$file);
+        try{
+            $row->delete();
+                File::delete($file_name);
+          
+            }
+            catch(QueryException $q){
+             
+                return redirect()->back()->with('flash_danger','You cannot delete related with another...');  
+    
+            }
+                return redirect()->back()->with('flash_success', 'Data Has Been Deleted Successfully !');
+
     }
 }

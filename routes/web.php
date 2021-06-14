@@ -22,6 +22,8 @@ Route::namespace('Admin')->group(function () {
     Route::resource('shop', 'ShopController');
     Route::resource('color', 'ColorController');
     Route::resource('product', 'ProductController');
-   
+    Route::post('/storeProductImage', 'ProductController@storeProductImage')->name('storeProductImage');
+    Route::post('/updateProductImage', 'ProductController@updateProductImage')->name('updateProductImage');
+    Route::post('/deleteProductImage', 'ProductController@deleteProductImage')->name('deleteProductImage');
 
 });

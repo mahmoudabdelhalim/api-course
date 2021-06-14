@@ -27,7 +27,7 @@
                     <table id="courseEval" class="dattable table table-striped thead-dark  w-100">
                         <thead>
                             <th>{{ __('#') }}</th>
-                            <th>{{ __('img') }}</th>
+                           
                             <th>{{ __('name') }}</th>
                             <th>{{ __('brand') }}</th>
                             <th>{{ __('price') }}</th>
@@ -39,13 +39,15 @@
                             @foreach($rows as $index => $row)
                             <tr>
                                 <td>{{ $index +1 }}</td>
-                                <td> <img src="{{ asset('uploads/product')}}/{{ $row->image }}" alt=""></td>
+                            
                                 <td>{{$row->name}}</td>
-                                <td>{{$row->desc}}</td>
-                                <td>{{$row->brand->name ??''}}</td>
+                                <td>{{$row->brand->name ?? ''}}</td>
                                 <td>{{$row->price}}</td>
                                 <td>{{$row->price_after_discount}}</td>
                                
+                                <td>{{$row->description}}</td>
+                             
+                        
                                 <td>
                                     <a href="{{ route('product.edit', $row->id) }}" class="btn btn-info d-inline-block">edit</a>
                                     <a href="#" onclick="destroy('this product','{{$row->id}}')" class="btn d-inline-block btn-danger">delete</a>

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Shop')
+@section('title', 'product')
 
 
 @section('crumb')
@@ -21,7 +21,7 @@
 		<div class="ms-panel">
 			<div class="ms-panel-header d-flex justify-content-between">
 				<h6>{{ __('add') }}</h6>
-				<a  href="{{route('shop.index')}}" class="btn btn-danger"> {{ __('back') }}  </a>
+				<a  href="{{route('product.index')}}" class="btn btn-danger"> {{ __('back') }}  </a>
 			</div>
 			<div class="ms-panel-body col-md-6 col-md-offset-2">
 
@@ -44,18 +44,7 @@
                       <div class="ms-auth-container row">
     
                           <div class="col-md-12">
-                          <div class="col-md-4">
-                        <label> product img </label>
-                      <div class="form-group">
-                        <div id="uploadOne" class="img-upload">
-                        <img src="{{ asset('assets/img/default-user.gif')}}" alt="">
-                          <div class="upload-icon">
-                            <input type="file" name="image" class="upload">
-                            <i class="fas fa-camera    "></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                        
                               <div class="form-group">
                                   <label  >{{ __('Name') }}</label>
                                   <div class="input-group">
