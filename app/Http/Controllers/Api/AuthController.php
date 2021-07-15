@@ -74,4 +74,22 @@ class AuthController extends BaseController
             return $this->sendError($e->getMessage(), 'Error happens!!');
         }
     }
+
+ /**
+     * logout api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        try
+        {
+            $token = $request->user()->token();
+            $token->revoke();
+
+            return $this->sendError(null, 'You have been successfully logged out!');
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 'You don\'\t Login');
+        }
+    }
 }

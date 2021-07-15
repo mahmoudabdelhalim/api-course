@@ -39,10 +39,11 @@
     <!-- product  -->
     <li class="menu-item">
         <a href="#" class="has-chevron" data-toggle="collapse" data-target="#contactsdropdown" aria-expanded="false" aria-controls="contactsdropdown">
-        <span><i class="material-icons fs-16">assignment</i>{{ __('product') }}</span>
+        <span><i class="material-icons fs-16">assignment</i>{{ __('Main Data') }}</span>
       </a>
         <ul id="contactsdropdown" class="collapse" aria-labelledby="basic-elements" data-parent="#side-nav-accordion">
           <li> <a href="{{route('product.index')}}">{{ __('product') }}</a> </li>
+          <li> <a href="{{route('category.index')}}">{{ __('Category') }}</a> </li>
          
         </ul>
       </li>

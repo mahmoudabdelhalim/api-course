@@ -14,7 +14,9 @@
 </nav>
 
 @endsection
-
+@section('style')
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12">
@@ -158,8 +160,12 @@
 
 
             <li class="btn btn-light ">
-                <a href="#tab_default_6" data-toggle="tab" role="tab">
+                <a href="#tab_default_5" data-toggle="tab" role="tab">
                     Product Size </a>
+            </li>
+            <li class="btn btn-light ">
+                <a href="#tab_default_6" data-toggle="tab" role="tab">
+                    Product Rate </a>
             </li>
 
         </ul>
@@ -183,24 +189,92 @@
                                             <tr>
                                                 <th scope="col">Feature Name</th>
                                                 <th scope="col">Feature Text</th>
-                                                <th scope="col">Active</th>
+
                                                 <th scope="col"></th>
 
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        @foreach($features as $feature)
                                             <tr>
-                                                <td>Made in china</td>
-                                                <td>china</td>
-                                                <td><i class="fas fa-check" style="color: green;"></i></td>
+                                                <td>{{$feature->key_name}}</td>
+                                                <td>{{$feature->value_text}}</td>
+
 
 
                                                 <td>
 
-                                                    <a href="#" class="btn btn-info d-inline-block" data-toggle="modal" data-target="#addfeatures">edit</a>
-                                                    <a href="#" onclick="delette('this FEATURES ');" class="btn d-inline-block btn-danger">delete</a>
-                                                </td>
+                                                <a href="#" class="btn btn-info d-inline-block editimgslider" data-toggle="modal" data-target="#addfeatures{{$feature->id}}" data-id="">edit</a>
+
+<a href="#" onclick="destroy('this Feature','{{$feature->id}}')" class="btn d-inline-block btn-danger">delete</a>
+                     <form id="delete_{{$feature->id}}" action="{{ route('deleteFeature')}}"  method="POST" style="display: none;">
+                @csrf
+
+<input type="hidden" name="feature_id" value="{{$feature->id}}">
+
+                <button type="submit" value=""></button>
+                </form>    </td>
                                             </tr>
+                                            <!----- ---------------Add Feature ----------->
+
+
+<div class="modal fade" id="addfeatures{{$feature->id}}" tabindex="-1" role="dialog" aria-labelledby="addfeatures">
+  <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-content">
+      <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">X
+
+      </button>
+      <h3>New Feature </h3>
+      <div class="modal-body">
+
+
+        <div class="ms-auth-container row no-gutters">
+          <div class="col-12 p-3">
+          <form action="{{route('updateFeature')}}" method="POST" >
+              @csrf
+              <input type="hidden" name="feature_id" value="{{$feature->id}}">
+              <input type="hidden" name="product_id" value="{{$row->id}}">
+              <div class="ms-auth-container row">
+
+
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Name</label>
+                    <div class="input-group">
+                      <input type="text" name="key_name" value="{{$feature->key_name}}">
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Value</label>
+                    <div class="input-group">
+                      <input type="text" name="value_text" value="{{$feature->value_text}}">
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="input-group d-flex justify-content-end text-center">
+
+
+                <input type="button" value="Cancel" class="btn btn-dark mx-2" data-dismiss="modal" aria-label="Close">
+                <input type="submit" value="Add" class="btn btn-success ">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- End -->
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -214,14 +288,18 @@
 
 
 
-            <!-- order -->
-            <div class="tab-pane" id="tab_default_4">
-                <!-- Add OFFERS     -->
-                <div class="row">
+
+
+
+
+            <!-- Size -->
+            <div class="tab-pane" id="tab_default_5">
+                     <!-- Add Color     -->
+                     <div class="row">
                     <div class="col-md-12">
                         <div class="ms-panel">
                             <div class="ms-panel-header d-flex justify-content-between">
-                                <button class="btn btn-dark" data-toggle="modal" data-target="#addOffer"> Add OFFERS </button>
+                                <button class="btn btn-dark" data-toggle="modal" data-target="#addsize"> Add Size </button>
                             </div>
                             <div class="ms-panel-body">
 
@@ -229,30 +307,88 @@
                                     <table id="courseEval" class="dattable table table-striped thead-dark  w-100">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Offer text</th>
-                                                <th scope="col">Offer order </th>
-                                                <th scope="col">Off quantity</th>
-                                                <th scope="col">Discount Percentage %</th>
+                                                <th scope="col">Name</th>
 
                                                 <th scope="col"></th>
 
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        @foreach($sizes as $size)
                                             <tr>
-                                                <td>100 EGP off per 1000 qty</td>
-                                                <td>20</td>
-                                                <td>100</td>
-                                                <td>12</td>
+
+                                                <td>{{$size->size->name ?? ''}}</td>
 
 
 
                                                 <td>
 
-                                                    <a href="#" class="btn btn-info d-inline-block" data-toggle="modal" data-target="#addOffer">edit</a>
-                                                    <a href="#" onclick="delette('this Offer ');" class="btn d-inline-block btn-danger">delete</a>
-                                                </td>
+                                                <a href="#" class="btn btn-info d-inline-block editimgslider" data-toggle="modal" data-target="#addsize{{$size->id}}" data-id="">edit</a>
+
+<a href="#" onclick="destroy('this size','{{$size->id}}')" class="btn d-inline-block btn-danger">delete</a>
+                     <form id="delete_{{$size->id}}" action="{{ route('deleteProductSize')}}"  method="POST" style="display: none;">
+                @csrf
+
+<input type="hidden" name="product_size_id" value="{{$size->id}}">
+
+                <button type="submit" value=""></button>
+                </form>         </td>
                                             </tr>
+                                              <!----- ---------------Add Color ----------->
+
+
+<div class="modal fade" id="addsize{{$size->id}}" tabindex="-1" role="dialog" aria-labelledby="addsize">
+  <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-content">
+      <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">X
+
+      </button>
+      <h3>Edit Color </h3>
+      <div class="modal-body">
+
+
+        <div class="ms-auth-container row no-gutters">
+          <div class="col-12 p-3">
+          <form action="{{route('updateProductSize')}}" method="POST" >
+              @csrf
+              <input type="hidden" name="product_size_id" value="{{$size->id}}">
+              <input type="hidden" name="product_id" value="{{$row->id}}">
+              <div class="ms-auth-container row">
+
+
+
+                <div class="col-md-12">
+                <div class="form-group">
+                                  <label  >{{ __('Size') }}</label>
+                                  <div class="input-group">
+
+                               <select name="size_id" class="form-control" id="">
+                                 @foreach($mainSizes as $type)
+                                 <option value="{{$type->id}}" {{ $type->id == $size->size_id ? 'selected' : '' }}>{{$type->name}}</option>
+                                 @endforeach
+                               </select>
+                                  </div>
+                              </div>
+                </div>
+
+
+              </div>
+              <div class="input-group d-flex justify-content-end text-center">
+
+
+                <input type="button" value="Cancel" class="btn btn-dark mx-2" data-dismiss="modal" aria-label="Close">
+                <input type="submit" value="Add" class="btn btn-success ">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- End -->
+@endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -261,25 +397,70 @@
                     </div>
                 </div>
             </div>
-            <!--End RELATED PRODUCTS -->
-            <!-- Review -->
-            <div class="tab-pane" id="tab_default_5">
-                <h3 style="margin-bottom: 20px;color: green;border-bottom: 1px solid #CCC;"> Product Reviews</h3>
-                <div class="col-md-12">
-                    <div class="product-reviews" id="reviews">
+            <!-- end Size -->
 
 
 
+            <div class="tab-pane" id="tab_default_6">
+                <!-- Slow Rate     -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ms-panel">
 
+                            <div class="ms-panel-body">
 
+                                <div class="table-responsive">
+                                    <table id="courseEval" class="dattable table table-striped thead-dark  w-100">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">User Name</th>
+                                                <th scope="col"> Rate</th>
+                                                <th scope="col"> Comment</th>
 
+                                                <th scope="col"></th>
 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($rates as $rate)
+                                            <tr>
 
+                                                <td>{{$rate->user->name ?? ''}}</td>
+                                                <td>
+                                                @foreach(range(1,5) as $i)
+								
+									@if($rate->rate_no >=$i )
+										<i class="fa fa-star"></i>
+										@else
+										<i class="fa fa-star-o" aria-hidden="true"></i>
+										@endif
+										
+								
+									@endforeach
+                                              </td>
+                                                <td>{{$rate->comment ?? ''}}</td>
 
+<td></td>
+
+                                            </tr>
+
+@endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- end Review -->
+            <!--End Rate -->
+
+
+
+
+
+
+
         </div>
 
 
@@ -294,6 +475,176 @@
 
 </div>
 </div>
+<!----- ---------------Add Feature ----------->
+
+
+<div class="modal fade" id="addfeatures" tabindex="-1" role="dialog" aria-labelledby="addfeatures">
+  <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-content">
+      <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">X
+
+      </button>
+      <h3>New Feature </h3>
+      <div class="modal-body">
+
+
+        <div class="ms-auth-container row no-gutters">
+          <div class="col-12 p-3">
+            <form action="{{route('storeFeature')}}" method="POST" >
+              @csrf
+              <input type="hidden" name="product_id" value="{{$row->id}}">
+              <div class="ms-auth-container row">
+
+
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Name</label>
+                    <div class="input-group">
+                      <input type="text" name="key_name">
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Value</label>
+                    <div class="input-group">
+                      <input type="text" name="value_text">
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="input-group d-flex justify-content-end text-center">
+
+
+                <input type="button" value="Cancel" class="btn btn-dark mx-2" data-dismiss="modal" aria-label="Close">
+                <input type="submit" value="Add" class="btn btn-success ">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+  <!----- ---------------Add Color ----------->
+
+
+  <div class="modal fade" id="addcolor" tabindex="-1" role="dialog" aria-labelledby="addcolor">
+  <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-content">
+      <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">X
+
+      </button>
+      <h3>Edit Color </h3>
+      <div class="modal-body">
+
+
+        <div class="ms-auth-container row no-gutters">
+          <div class="col-12 p-3">
+          <form action="{{route('storeProductColor')}}" method="POST" >
+              @csrf
+
+              <input type="hidden" name="product_id" value="{{$row->id}}">
+              <div class="ms-auth-container row">
+
+
+
+                <div class="col-md-12">
+                <div class="form-group">
+                                  <label  >{{ __('Color') }}</label>
+                                  <div class="input-group">
+
+                               <select name="color_id" class="form-control" id="">
+                                 @foreach($mainColors as $type)
+                                 <option value="{{$type->id}}">{{$type->name}}</option>
+                                 @endforeach
+                               </select>
+                                  </div>
+                              </div>
+                </div>
+
+
+              </div>
+              <div class="input-group d-flex justify-content-end text-center">
+
+
+                <input type="button" value="Cancel" class="btn btn-dark mx-2" data-dismiss="modal" aria-label="Close">
+                <input type="submit" value="Add" class="btn btn-success ">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- End -->
+
+
+ <!----- ---------------Add Size ----------->
+
+
+ <div class="modal fade" id="addsize" tabindex="-1" role="dialog" aria-labelledby="addsize">
+  <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-content">
+      <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">X
+
+      </button>
+      <h3>Add Size </h3>
+      <div class="modal-body">
+
+
+        <div class="ms-auth-container row no-gutters">
+          <div class="col-12 p-3">
+          <form action="{{route('storeProductSize')}}" method="POST" >
+              @csrf
+
+              <input type="hidden" name="product_id" value="{{$row->id}}">
+              <div class="ms-auth-container row">
+
+
+
+                <div class="col-md-12">
+                <div class="form-group">
+                                  <label  >{{ __('Size') }}</label>
+                                  <div class="input-group">
+
+                               <select name="size_id" class="form-control" id="">
+                                 @foreach($mainSizes as $type)
+                                 <option value="{{$type->id}}">{{$type->name}}</option>
+                                 @endforeach
+                               </select>
+                                  </div>
+                              </div>
+                </div>
+
+
+              </div>
+              <div class="input-group d-flex justify-content-end text-center">
+
+
+                <input type="button" value="Cancel" class="btn btn-dark mx-2" data-dismiss="modal" aria-label="Close">
+                <input type="submit" value="Add" class="btn btn-success ">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- End -->
+
 
 
 @endsection

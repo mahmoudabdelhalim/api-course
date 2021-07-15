@@ -13,4 +13,8 @@ class Category extends Model
     'order',
     'parent_category_id',
     ];
+    public function sub_cat(){
+        return $this->belongsTo('App\Models\Category','parent_category_id');
+    }
+    
 }
