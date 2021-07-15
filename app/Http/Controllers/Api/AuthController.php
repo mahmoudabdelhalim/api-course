@@ -87,7 +87,7 @@ class AuthController extends BaseController
             $token = $request->user()->token();
             $token->revoke();
 
-            return $this->sendError(null, 'You have been successfully logged out!');
+            return $this->sendResponse(null, 'You have been successfully logged out!');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'You don\'\t Login');
         }
