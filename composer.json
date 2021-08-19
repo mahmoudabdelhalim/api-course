@@ -16,7 +16,9 @@
         "laravel/helpers": "^1.4",
         "laravel/passport": "~9.0",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^2.4"
+        "laravel/ui": "^2.4",
+        "nexmo/client": "^2.4",
+        "vonage/client": "^2.4"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

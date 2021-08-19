@@ -7,7 +7,8 @@ use App\Http\Controllers\Api\BaseController;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Validator;
-   
+use Exception; 
+use App\Models\Helper;
 class AuthController extends BaseController
 {
     /**
@@ -17,25 +18,32 @@ class AuthController extends BaseController
      */
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required',
+        //     'email' => 'required|email',
+        //     'password' => 'required',
+        //     'c_password' => 'required|same:password',
+        // ]);
    
-        if($validator->fails()){
-            return $this->convertErrorsToString($validator->messages());
-        }
+        // if($validator->fails()){
+        //     return $this->convertErrorsToString($validator->messages());
+        // }
    
         try
         {
-            $input = $request->all();
-            $input['password'] = bcrypt($input['password']);
-            $user = User::create($input);
-            $user->accessToken =  $user->createToken('MyApp')->accessToken;
+            // $input = $request->all();
+            // $input['password'] = bcrypt($input['password']);
+            // $user = User::create($input);
+            // $user->accessToken =  $user->createToken('MyApp')->accessToken;
             
-            return $this->sendResponse($user,'User has been registed');
+            //send sms
+            
+            $data['mobile']=201117615935;
+            $data['msg']='تم التفعيل';
+            $sms=Helper::send_sms($data);
+// $user->smsResponse=$sms;
+
+            return $this->sendResponse($sms,'User has been registed');
 
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error happens!!');
@@ -92,4 +100,6 @@ class AuthController extends BaseController
             return $this->sendError($e->getMessage(), 'You don\'\t Login');
         }
     }
+
 }
+   

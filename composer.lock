@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55e12864a7e172cb48cbb462904d5a34",
+    "content-hash": "f174be07ea5d96d12fbfb64c190bc88c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -117,6 +117,79 @@
                 }
             ],
             "time": "2021-01-20T22:51:39+00:00"
+        },
+        {
+            "name": "composer/package-versions-deprecated",
+            "version": "1.11.99.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/package-versions-deprecated.git",
+                "reference": "c6522afe5540d5fc46675043d3ed5a45a740b27c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/package-versions-deprecated/zipball/c6522afe5540d5fc46675043d3ed5a45a740b27c",
+                "reference": "c6522afe5540d5fc46675043d3ed5a45a740b27c",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1.0 || ^2.0",
+                "php": "^7 || ^8"
+            },
+            "replace": {
+                "ocramius/package-versions": "1.11.99"
+            },
+            "require-dev": {
+                "composer/composer": "^1.9.3 || ^2.0@dev",
+                "ext-zip": "^1.13",
+                "phpunit/phpunit": "^6.5 || ^7"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PackageVersions\\Installer",
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PackageVersions\\": "src/PackageVersions"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be"
+                }
+            ],
+            "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
+            "support": {
+                "issues": "https://github.com/composer/package-versions-deprecated/issues",
+                "source": "https://github.com/composer/package-versions-deprecated/tree/1.11.99.2"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-05-24T07:46:03+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -2220,6 +2293,128 @@
                 }
             ],
             "time": "2021-06-28T22:38:45+00:00"
+        },
+        {
+            "name": "nexmo/client",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nexmo/nexmo-php-complete.git",
+                "reference": "9d515f6592d466159f79dde460ce2b99b8128279"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Nexmo/nexmo-php-complete/zipball/9d515f6592d466159f79dde460ce2b99b8128279",
+                "reference": "9d515f6592d466159f79dde460ce2b99b8128279",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0",
+                "nexmo/client-core": "^2.0",
+                "php": ">=7.2"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Lytle",
+                    "email": "tim@nexmo.com",
+                    "homepage": "http://twitter.com/tjlytle",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Michael Heap",
+                    "email": "michael.heap@vonage.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Lorna Mitchell",
+                    "email": "lorna.mitchell@vonage.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Chris Tankersley",
+                    "email": "chris.tankersley@vonage.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Client for using Nexmo's API.",
+            "support": {
+                "email": "devrel@nexmo.com",
+                "source": "https://github.com/Nexmo/nexmo-php-complete/tree/2.4.0"
+            },
+            "time": "2020-09-10T18:41:31+00:00"
+        },
+        {
+            "name": "nexmo/client-core",
+            "version": "2.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nexmo/nexmo-php.git",
+                "reference": "5feed4876c603423c52eb751d1b46de9d60d1ceb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Nexmo/nexmo-php/zipball/5feed4876c603423c52eb751d1b46de9d60d1ceb",
+                "reference": "5feed4876c603423c52eb751d1b46de9d60d1ceb",
+                "shasum": ""
+            },
+            "require": {
+                "composer/package-versions-deprecated": "^1.11",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "laminas/laminas-diactoros": "^2.4",
+                "lcobucci/jwt": "^3.4|^4.0",
+                "php": ">=7.2",
+                "psr/container": "^1.0",
+                "psr/http-client-implementation": "^1.0",
+                "psr/log": "^1.1",
+                "vonage/nexmo-bridge": "^0.1.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": ">=6",
+                "helmich/phpunit-json-assert": "^3.3",
+                "php-http/mock-client": "^1.4",
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^8.5|^9.4",
+                "roave/security-advisories": "dev-latest",
+                "softcreatr/jsonpath": "^0.6.4",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Vonage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Tankersley",
+                    "email": "chris.tankersley@vonage.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Lorna Mitchell",
+                    "email": "lorna.mitchell@vonage.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Deprecated PHP Client for using Vonage's API - please use vonage/client-core",
+            "homepage": "https://developer.nexmo.com",
+            "support": {
+                "docs": "https://developer.nexmo.com",
+                "email": "devrel@vonage.com",
+                "issues": "https://github.com/Vonage/vonage-php-sdk-core/issues",
+                "source": "https://github.com/Vonage/vonage-php-sdk-core"
+            },
+            "time": "2021-04-30T21:42:12+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -5889,6 +6084,177 @@
                 }
             ],
             "time": "2020-11-12T00:07:28+00:00"
+        },
+        {
+            "name": "vonage/client",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Vonage/vonage-php-sdk.git",
+                "reference": "29f23e317d658ec1c3e55cf778992353492741d7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Vonage/vonage-php-sdk/zipball/29f23e317d658ec1c3e55cf778992353492741d7",
+                "reference": "29f23e317d658ec1c3e55cf778992353492741d7",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0",
+                "php": ">=7.2",
+                "vonage/client-core": "^2.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Lytle",
+                    "email": "tim@nexmo.com",
+                    "homepage": "http://twitter.com/tjlytle",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Michael Heap",
+                    "email": "michael.heap@vonage.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Lorna Mitchell",
+                    "email": "lorna.mitchell@vonage.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Chris Tankersley",
+                    "email": "chris.tankersley@vonage.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Client for using Vonage's API.",
+            "support": {
+                "email": "devrel@nexmo.com",
+                "issues": "https://github.com/Vonage/vonage-php-sdk/issues",
+                "source": "https://github.com/Vonage/vonage-php-sdk/tree/2.4.0"
+            },
+            "time": "2020-09-10T18:29:08+00:00"
+        },
+        {
+            "name": "vonage/client-core",
+            "version": "2.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Vonage/vonage-php-sdk-core.git",
+                "reference": "2b734ff7d86d4b6f169df49aed3aefcdac7a40d0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Vonage/vonage-php-sdk-core/zipball/2b734ff7d86d4b6f169df49aed3aefcdac7a40d0",
+                "reference": "2b734ff7d86d4b6f169df49aed3aefcdac7a40d0",
+                "shasum": ""
+            },
+            "require": {
+                "composer/package-versions-deprecated": "^1.11",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "laminas/laminas-diactoros": "^2.4",
+                "lcobucci/jwt": "^3.4|^4.0",
+                "php": ">=7.2",
+                "psr/container": "^1.0",
+                "psr/http-client-implementation": "^1.0",
+                "psr/log": "^1.1",
+                "vonage/nexmo-bridge": "^0.1.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": ">=6",
+                "helmich/phpunit-json-assert": "^3.3",
+                "php-http/mock-client": "^1.4",
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^8.5|^9.4",
+                "roave/security-advisories": "dev-latest",
+                "softcreatr/jsonpath": "^0.6.4",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Vonage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Tankersley",
+                    "email": "chris.tankersley@vonage.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Lorna Mitchell",
+                    "email": "lorna.mitchell@vonage.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Client for using Vonage's API.",
+            "homepage": "https://developer.nexmo.com",
+            "support": {
+                "docs": "https://developer.nexmo.com",
+                "email": "devrel@vonage.com",
+                "issues": "https://github.com/Vonage/vonage-php-sdk-core/issues",
+                "source": "https://github.com/Vonage/vonage-php-sdk-core"
+            },
+            "time": "2021-04-30T21:41:08+00:00"
+        },
+        {
+            "name": "vonage/nexmo-bridge",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nexmo/vonage-php-nexmo-bridge.git",
+                "reference": "62653b1165f4401580ca8d2b859f59c968de3711"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Nexmo/vonage-php-nexmo-bridge/zipball/62653b1165f4401580ca8d2b859f59c968de3711",
+                "reference": "62653b1165f4401580ca8d2b859f59c968de3711",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12.39",
+                "phpunit/phpunit": "^7.4",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/autoload.php"
+                ],
+                "psr-4": {
+                    "Vonage\\NexmoBridge\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Tankersley",
+                    "email": "chris.tankersley@vonage.com"
+                }
+            ],
+            "description": "Provides a bridge for using the Vonage PHP SDK with the older Nexmo namespace",
+            "support": {
+                "issues": "https://github.com/Nexmo/vonage-php-nexmo-bridge/issues",
+                "source": "https://github.com/Nexmo/vonage-php-nexmo-bridge/tree/master"
+            },
+            "time": "2020-08-25T02:50:42+00:00"
         }
     ],
     "packages-dev": [
