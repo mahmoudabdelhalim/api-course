@@ -25,8 +25,8 @@ class ProductController extends BaseController
         return $this->sendResponse($products, 'Last 3 product Retrieved  Successfully');
     }
 //GET SUB CATEGORY
-public function subCategories(){
-    $subCategories = Category::whereNotNull('parent_category_id')->get();
+public function subCategories($id){
+    $subCategories = Category::where('parent_category_id','=',$id)->get();
     return $this->sendResponse($subCategories, 'All Sub categories Retrieved  Successfully');
 }
 

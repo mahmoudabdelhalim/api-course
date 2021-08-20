@@ -26,7 +26,7 @@ Route::post('send-sms', 'Api\AuthController@sendSmsNotificaition');
 
 Route::get('products', 'Api\ProductController@index');
 Route::get('categories', 'Api\ProductController@categories');
-Route::get('subCategories', 'Api\ProductController@subCategories');
+Route::get('subCategories/{id}', 'Api\ProductController@subCategories');
 Route::get('latest-product', 'Api\ProductController@latest');
 Route::post('search', 'Api\ProductController@search');
 Route::get('show-product/{id}', 'Api\ProductController@single_product');
