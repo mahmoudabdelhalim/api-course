@@ -27,7 +27,11 @@ class ProductController extends BaseController
 //GET SUB CATEGORY
 public function subCategories($id){
     $subCategories = Category::where('parent_category_id','=',$id)->get();
-    return $this->sendResponse($subCategories, 'All Sub categories Retrieved  Successfully');
+    if($subCategories){
+        return $this->sendResponse($subCategories, 'All Sub categories Retrieved  Successfully');
+
+    }
+    return $this->sendError('Error', 'No data found !!');
 }
 
 //SEARCH
