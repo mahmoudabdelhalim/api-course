@@ -27,4 +27,36 @@ class Product extends Model
     public function shop(){
         return $this->belongsTo('App\Models\Shop','shop_id');
     }
+
+    public function users(){
+        return $this->belongsToMany('App\User','product_rates');
+      }
+      public function review(){
+        return $this->hasMany('App\Models\Product_rate');
+      }
+
+      public function sizes()
+      {
+      return $this->belongsToMany('App\Models\Size', 'product_sizes', 'product_id',
+     'size_id');
+       }
+
+    public function color()
+    {
+    return $this->belongsToMany('App\Models\Color', 'Product_colors', 'product_id',
+   'color_id');
+    }
+    public function details()
+    {
+        return $this->hasMany('App\Models\Product_componant');
+    }
+    public function avgRating()
+{
+    return round($this->review()->avg('rate_no'),1);
+}
+public function verifyedReviews() {
+    // return "ff";
+    return $this->review()->pluck('comment')->toArray();
+
+}
 }

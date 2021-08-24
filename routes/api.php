@@ -35,5 +35,5 @@ Route::get('show-product/{id}', 'Api\ProductController@single_product');
 
     Route::post('logout', 'Api\AuthController@logout');
     //
-    // Route::get('categories', 'Api\ProductController@categories');
+     Route::get('cart', 'Api\CartController@cart');
     });

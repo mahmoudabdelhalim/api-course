@@ -57,7 +57,9 @@ public function single_product($id){
 
     try
     {
-        $product=Product::where('id','=',$id)->first();
+        $product=Product::with('sizes','color','details','review')->where('id','=',$id)->first();
+        $product->rate=$product->avgRating();
+        // $product->review=$product->verifyedReviews();
         if($product){
 
             return $this->sendResponse($product, 'Geting Product successfully.');
