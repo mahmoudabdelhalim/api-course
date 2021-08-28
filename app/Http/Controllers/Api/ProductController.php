@@ -23,7 +23,7 @@ class ProductController extends BaseController
     }
     //GET LATEST PRODUCT
     public function latest(){
-        $products = Product::orderBy('id', 'desc')->take(3)->get();
+        $products = Product::get()->random(3);
         return $this->sendResponse($products, 'Last 3 product Retrieved  Successfully');
     }
 //GET SUB CATEGORY
