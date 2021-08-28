@@ -128,7 +128,7 @@ class AuthController extends BaseController
 
         $credentials = request()->validate([
             'email' => 'required|email',
-            'token' => 'required|string',
+            // 'token' => 'required|string',
             'password' => 'required|string',
         ]);
       $user=User::where('email',$request->email) ->first();
