@@ -31,6 +31,10 @@ class Product extends Model
     public function users(){
         return $this->belongsToMany('App\User','product_rates');
       }
+
+      public function images(){
+        return $this->hasMany('App\Models\Product_image');
+      }
       public function review(){
         return $this->hasMany('App\Models\Product_rate');
       }

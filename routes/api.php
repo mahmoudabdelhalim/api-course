@@ -22,6 +22,10 @@ Route::middleware('auth:api')->get('user', function (Request $request) {
 
 Route::post('register', 'Api\AuthController@register');
 Route::post('login', 'Api\AuthController@login');
+
+Route::post('password/email', 'Api\AuthController@forgot');
+Route::post('password/reset', 'Api\AuthController@reset');
+
 Route::post('send-sms', 'Api\AuthController@sendSmsNotificaition');
 
 Route::get('products', 'Api\ProductController@index');

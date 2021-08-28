@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController;
+use App\Http\Resources\ProductResource;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -57,12 +59,12 @@ public function single_product($id){
 
     try
     {
-        $product=Product::with('sizes','color','details','review')->where('id','=',$id)->first();
+        $product=Product::with('sizes','color','details','review','images')->where('id','=',$id)->first();
         $product->rate=$product->avgRating();
-        // $product->review=$product->verifyedReviews();
+
         if($product){
 
-            return $this->sendResponse($product, 'Geting Product successfully.');
+            return $this->sendResponse(ProductResource::make($product), 'Geting Product successfully.');
         }
         else
         {
