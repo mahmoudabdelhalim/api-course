@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product_rate extends Model
 {
+    protected $table = 'product_rates';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'product_id',
         'user_id',
         'rate_no',
         'comment',
-       
+
     ];
     public function user(){
         return $this->belongsTo('App\User','user_id');
