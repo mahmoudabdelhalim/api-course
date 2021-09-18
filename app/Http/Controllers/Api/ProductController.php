@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProResource;
+
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
@@ -13,7 +15,8 @@ class ProductController extends BaseController
 {
     public function index(){
         $products = Product::all();
-        return $this->sendResponse($products, 'All products Retrieved  Successfully');
+
+        return $this->sendResponse( ProResource::collection($products), 'All products Retrieved  Successfully');
     }
 
 //GET ALL CATEGORIES
