@@ -22,7 +22,8 @@ class BaseController extends Controller
         ];
 
 
-        return response()->json($response, 200);
+        // return response()->json($response, 200);
+        return json_encode($response,200);
     }
 
 
@@ -56,7 +57,7 @@ class BaseController extends Controller
     public function convertErrorsToString($errorArray)
     {
         $valArr = array();
-        foreach ($errorArray->toArray() as $key => $value) { 
+        foreach ($errorArray->toArray() as $key => $value) {
             $errStr = $key.' '.$value[0];
             //return $errStr;
             array_push($valArr, $errStr);
@@ -65,7 +66,7 @@ class BaseController extends Controller
         //     $errStrFinal = implode(',', $valArr);
         // }
         return $this->sendError('Validation Error', $valArr);
-        
+
     }
 
 
