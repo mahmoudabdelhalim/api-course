@@ -45,7 +45,7 @@ class AuthController extends BaseController
             // $sms = Helper::send_sms($data);
 // $user->smsResponse=$sms;
 
-            return $this->sendResponse($sms, 'User has been registed');
+            return $this->sendResponse($user, 'User has been registed');
 
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error happens!!');
