@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SizeResource extends JsonResource
+class CartResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,10 @@ class SizeResource extends JsonResource
     {
         return [
 
-            "name" => $this->name ?? '',
+
+            'user_id'=> UserResource::make($this->user),
+            'product_id' => ProductResource::make($this->product),
+            'quantity'=> $this->quantity !==null ? $this->quantity : '',
 
             ];
     }

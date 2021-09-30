@@ -3,8 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
-class SizeResource extends JsonResource
+use App\Http\Resources\SizeResource;
+use App\Http\Resources\DetailsResource;
+class CartItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +17,9 @@ class SizeResource extends JsonResource
     {
         return [
 
-            "name" => $this->name ?? '',
+
 
             ];
     }
+
 }

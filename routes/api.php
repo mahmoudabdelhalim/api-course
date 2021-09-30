@@ -39,5 +39,12 @@ Route::get('show-product/{id}', 'Api\ProductController@single_product');
 
     Route::post('logout', 'Api\AuthController@logout');
     //
+    Route::post('add-to-cart', 'Api\CartController@storeCart');
+
      Route::get('cart', 'Api\CartController@cart');
+     Route::get('add-qty/{id}', 'Api\CartController@AddQuantity');
+     Route::get('sub-qty/{id}', 'Api\CartController@SubstractQuantity');
+     Route::post('checkout', 'Api\CartController@checkout');
+     Route::post('place-order', 'Api\CartController@order');
+     Route::get('order', 'Api\CartController@order');
     });

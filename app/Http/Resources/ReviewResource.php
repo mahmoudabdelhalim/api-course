@@ -16,8 +16,8 @@ class ReviewResource extends JsonResource
     {
         return [
 
-            "rate_no" => $this->rate_no,
-            'comment'=>$this->comment,
+            "rate_no" => $this->rate_no ?? '',
+            'comment'=>$this->comment ?? '',
 
             "user"=>new UserResource($this->user),
 

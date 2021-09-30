@@ -16,8 +16,8 @@ class DetailsResource extends JsonResource
     {
         return [
 
-            "name" => $this->key_name,
-            'desc'=>$this->value_text,
+            "name" => $this->key_name ?? '',
+            'desc'=>$this->value_text ?? '',
 
             ];
     }
