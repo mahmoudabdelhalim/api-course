@@ -35,8 +35,11 @@ Route::get('latest-product', 'Api\ProductController@latest');
 Route::post('search', 'Api\ProductController@search');
 Route::get('show-product/{id}', 'Api\ProductController@single_product');
 //must login brfore
-  Route::middleware('auth:api')->group(function () {
+Route::post('forgot-password', 'Api\AuthController@forgot_password');
 
+Route::middleware('auth:api')->group(function () {
+
+    Route::post('change-password', 'Api\AuthController@change_password');
     Route::post('logout', 'Api\AuthController@logout');
     //
     Route::post('add-to-cart', 'Api\CartController@storeCart');
@@ -46,5 +49,9 @@ Route::get('show-product/{id}', 'Api\ProductController@single_product');
      Route::get('sub-qty/{id}', 'Api\CartController@SubstractQuantity');
      Route::post('checkout', 'Api\CartController@checkout');
      Route::post('place-order', 'Api\CartController@order');
-     Route::get('order', 'Api\CartController@order');
+     Route::post('promo-code', 'Api\CartController@promo');
+
     });
+
+
+

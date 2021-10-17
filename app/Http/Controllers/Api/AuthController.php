@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Validator;
 use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Hash;
+
 class AuthController extends BaseController
 {
     /**
@@ -106,48 +108,107 @@ class AuthController extends BaseController
      * @return \Illuminate\Http\Response
      */
 
-    public function forgot()
-    {
+    // public function forgot()
+    // {
 
-        // $credentials = request()->validate(['email' => 'required|email']);
-        // dd($credentials);
-        $user = User::where('email', request()->input('email'))->first();
-        $token = Password::getRepository()->create($user);
+    //     // $credentials = request()->validate(['email' => 'required|email']);
+    //     // dd($credentials);
+    //     $user = User::where('email', request()->input('email'))->first();
+    //     $token = Password::getRepository()->create($user);
 
-        // Password::sendResetLink($credentials);
-        \Mail::send(['text' => 'emails.password'], ['token' =>$token], function (Message $message) use ($user) {
-            $message->subject(config('app.name') . ' Password Reset Link');
-            $message->to($user->email);
-        });
+    //     // Password::sendResetLink($credentials);
+    //     \Mail::send(['text' => 'emails.password'], ['token' =>$token], function (Message $message) use ($user) {
+    //         $message->subject(config('app.name') . ' Password Reset Link');
+    //         $message->to($user->email);
+    //     });
 
-        return response()->json(["msg" => 'Reset password link sent on your email id.']);
+    //     return response()->json(["msg" => 'Reset password link sent on your email id.']);
+    // }
+
+    // public function reset(Request $request)
+    // {
+
+    //     $credentials = request()->validate([
+    //         'email' => 'required|email',
+    //         // 'token' => 'required|string',
+    //         'password' => 'required|string',
+    //     ]);
+    //   $user=User::where('email',$request->email) ->first();
+    //     // $token ="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMWViNTY1OTExYjU2NjZhZTBkZGU0NGU3Mjg1YzcyY2MxYTgyYTQ1MjhjNDNhYzM3YmQ4OTNkMzAzZGI1MTJiODk1Y2E2MmY3YjdmN2JlMmUiLCJpYXQiOjE2Mjk4NDQ5OTYsIm5iZiI6MTYyOTg0NDk5NiwiZXhwIjoxNjYxMzgwOTk2LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.WrpwszDMPU-RP2q1D4hO4ps0aSmJiEn_9LI7vfoWmoOZdUHvBf8zUy19Q3o37bw1Yc3Dqk6NNAmVUh82pvUv0wq1WhbKE7FD67AxTkDz9rEZGQPM-5aSm0nsytj7O3SP7OccBME9nlSH8FwsVPhQLGUoJevc3z_uuCvw_w0P7NEEP7NSW_uwp6-7PBPJFOjt8WPmUX8u9ZIE8_eJNpOTPXFXzSVLhB_zmF2nz-laiDQF_c3f3oC0byf1X8D68FT3PjtrNR2YvU7X2D_E4uaTNCZQW4KW5oDaFdCnx8mgzWPLeMFH4xDRayXXSXRHAKnnJaY3iZOuq768Rkd_WIS6eAKHEJOjthxADYEf02jrQLOjwLbtldMfTi41E25uXJ4LUaspMGz41jtUpRvw0vWLqhFUlOg9mQQsZNzyX21eFQ5PWxGkUgCjT7Yo89thUt8ncznXZWIrQBkno3C5axuBzOMZsC598_LhvwkdlQqcv2W24Qy9iNgdpmovTWmD1uL2xdUgrizH_-jDHJoP4DJLnJ1wyhY64zRXDst25jSIgE3wqnGHVtwvTiPK2BxqZ67kNKrctDuY8Biz8NBvK6a09AF7u6WR02N3S-JHMfbtbuy88qBb-s4nj-rj8g8h5Yok8sGTuUfUoenMK4wV7Sx9VJ4PEkAjeNRhgBxQfvGKhBg";
+    //     $data = [
+    //         'email' => $request->email,
+    //         // 'token' => $token,
+    //         'password' => $request->password
+    //     ];
+
+    //     // $reset_password_status = Password::reset($credentials, function ($user, $password) {
+    //         $user->password =bcrypt($request->password);
+    //         $user->save();
+    //     // });
+
+    //     // if ($reset_password_status == Password::INVALID_TOKEN) {
+    //     //     return response()->json(["msg" => "Invalid token provided"], 400);
+    //     // }
+
+    //     return response()->json(["msg" => "Password has been successfully changed"]);
+    // }
+
+
+    public function forgot_password(Request $request)
+{
+    $input = $request->all();
+    $rules = array(
+        'email' => "required|email",
+    );
+    $validator = Validator::make($input, $rules);
+    if ($validator->fails()) {
+        return $this->convertErrorsToString($validator->messages());
+    } else {
+        try {
+            $response = Password::sendResetLink($request->only('email'), function (Message $message) {
+                $message->subject($this->getEmailSubject());
+            });
+            return $this->sendResponse($response, 'User has been send mail');
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 'Error happens!!');
+        }
     }
+      return $this->sendResponse(null, 'User has been send mail');
+}
 
-    public function reset(Request $request)
-    {
-
-        $credentials = request()->validate([
-            'email' => 'required|email',
-            // 'token' => 'required|string',
-            'password' => 'required|string',
-        ]);
-      $user=User::where('email',$request->email) ->first();
-        // $token ="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMWViNTY1OTExYjU2NjZhZTBkZGU0NGU3Mjg1YzcyY2MxYTgyYTQ1MjhjNDNhYzM3YmQ4OTNkMzAzZGI1MTJiODk1Y2E2MmY3YjdmN2JlMmUiLCJpYXQiOjE2Mjk4NDQ5OTYsIm5iZiI6MTYyOTg0NDk5NiwiZXhwIjoxNjYxMzgwOTk2LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.WrpwszDMPU-RP2q1D4hO4ps0aSmJiEn_9LI7vfoWmoOZdUHvBf8zUy19Q3o37bw1Yc3Dqk6NNAmVUh82pvUv0wq1WhbKE7FD67AxTkDz9rEZGQPM-5aSm0nsytj7O3SP7OccBME9nlSH8FwsVPhQLGUoJevc3z_uuCvw_w0P7NEEP7NSW_uwp6-7PBPJFOjt8WPmUX8u9ZIE8_eJNpOTPXFXzSVLhB_zmF2nz-laiDQF_c3f3oC0byf1X8D68FT3PjtrNR2YvU7X2D_E4uaTNCZQW4KW5oDaFdCnx8mgzWPLeMFH4xDRayXXSXRHAKnnJaY3iZOuq768Rkd_WIS6eAKHEJOjthxADYEf02jrQLOjwLbtldMfTi41E25uXJ4LUaspMGz41jtUpRvw0vWLqhFUlOg9mQQsZNzyX21eFQ5PWxGkUgCjT7Yo89thUt8ncznXZWIrQBkno3C5axuBzOMZsC598_LhvwkdlQqcv2W24Qy9iNgdpmovTWmD1uL2xdUgrizH_-jDHJoP4DJLnJ1wyhY64zRXDst25jSIgE3wqnGHVtwvTiPK2BxqZ67kNKrctDuY8Biz8NBvK6a09AF7u6WR02N3S-JHMfbtbuy88qBb-s4nj-rj8g8h5Yok8sGTuUfUoenMK4wV7Sx9VJ4PEkAjeNRhgBxQfvGKhBg";
-        $data = [
-            'email' => $request->email,
-            // 'token' => $token,
-            'password' => $request->password
-        ];
-
-        // $reset_password_status = Password::reset($credentials, function ($user, $password) {
-            $user->password =bcrypt($request->password);
-            $user->save();
-        // });
-
-        // if ($reset_password_status == Password::INVALID_TOKEN) {
-        //     return response()->json(["msg" => "Invalid token provided"], 400);
-        // }
-
-        return response()->json(["msg" => "Password has been successfully changed"]);
+public function change_password(Request $request)
+{
+    $input = $request->all();
+    $userid = Auth::user()->id;
+    $rules = array(
+        'old_password' => 'required',
+        'new_password' => 'required|min:6',
+        'confirm_password' => 'required|same:new_password',
+    );
+    $validator = Validator::make($input, $rules);
+    if ($validator->fails()) {
+        return $this->convertErrorsToString($validator->messages());
+    } else {
+        try {
+            if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
+                $arr = array("status" => true, "message" => "Check your old password.");
+                // return $this->sendResponse(null, 'You have been successfully logged out!');
+            } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
+                $arr = array("status" => true, "message" => "Please enter a password which is not similar then current password.", "data" => array());
+            } else {
+                User::where('id', $userid)->update(['password' => Hash::make($input['new_password'])]);
+                $arr = array("status" => true, "message" => "Password updated successfully.");
+            }
+        } catch (\Exception $ex) {
+            if (isset($ex->errorInfo[2])) {
+                $msg = $ex->errorInfo[2];
+            } else {
+                $msg = $ex->getMessage();
+            }
+            $arr = array("status" => false, "message" => $msg);
+        }
     }
+    // return \Response::json($arr);
+    return $this->sendResponse($arr, 'User has been change_password');
+}
 }

@@ -9,6 +9,8 @@ use App\Models\Cart_items;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Promo;
+
 use Validator;
 
 class CartController extends BaseController
@@ -120,10 +122,15 @@ class CartController extends BaseController
         }
     }
 
-    public function order(){
+    public function order(Request $request){
+
 
         try
         {
+            $promo = Promo::where('promo_key','=',$request->promo)->first();
+
+
+
             $user = Auth::user();
             $cartData = Cart::where('user_id', $user->id)->where('status', "=", 1)->first();
             if ($cartData) {
@@ -141,10 +148,40 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
 
                 ];
                 $order = Order::create($returnData);
+                if ($promo && $promo->status==1) {
+                    $order->copoun=$request->promo;
+                    $order->total=$sumPrice* $promo->value;
+                    $order->save();
+                }
                 return $this->sendResponse($order, 'Geting Order successfully.');
             } else {
                 return $this->sendError('Invalid Order !');
             }
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 'Error happens!!');
+        }
+    }
+
+    public function promo(Request $request){
+        $validator = Validator::make($request->all(), [
+            'promo' => 'required',
+
+        ]);
+
+        if ($validator->fails()) {
+            return $this->convertErrorsToString($validator->messages());
+        }
+
+        try
+        {
+            $promo = Promo::where('promo_key','=',$request->promo)->first();
+            if ($promo && $promo->status==1) {
+
+                return $this->sendResponse($promo, 'adding promo code to order');
+            } else {
+                return $this->sendError('promo not added !');
+            }
+
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error happens!!');
         }

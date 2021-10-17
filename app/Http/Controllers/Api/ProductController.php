@@ -27,7 +27,7 @@ class ProductController extends BaseController
     //GET LATEST PRODUCT
     public function latest(){
         $products = Product::inRandomOrder()->take(3)->get();
-        return $this->sendResponse($products, 'Last 3 product Retrieved  Successfully');
+        return $this->sendResponse(ProductResource::collection($products), 'Last 3 product Retrieved  Successfully');
     }
 //GET SUB CATEGORY
 public function subCategories($id){
@@ -50,7 +50,7 @@ public function search(Request $request){
         ->orwhereHas('category', function ($query) use ($search){
             $query->where('name','LIKE',"%$search%")->orWhere('description','LIKE',"%$search%");
         })->get();
-        return $this->sendResponse($products, 'All Search result Retrieved  Successfully');
+        return $this->sendResponse(ProductResource::collection($products), 'All Search result Retrieved  Successfully');
     }else{
         return $this->sendError('Error', 'Enter Search name !!');
     }
