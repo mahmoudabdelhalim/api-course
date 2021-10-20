@@ -224,4 +224,19 @@ public function change_password(Request $request)
     // return \Response::json($arr);
     return $this->sendResponse($arr, 'User has been change_password');
 }
+
+public function Profile($id){
+    try
+    {
+        $user = User::where('id','=', $id)->first();
+        if ($user) {
+
+            return $this->sendResponse($user, 'User Profile.');
+        } else {
+            return $this->sendError('Invalid User!');
+        }
+    } catch (\Exception $e) {
+        return $this->sendError($e->getMessage(), 'Error happens!!');
+    }
+}
 }

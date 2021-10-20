@@ -194,4 +194,9 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
             return $this->sendError($e->getMessage(), 'Error happens!!');
         }
     }
+    public function allOrder(){
+        $orders = Order::all();
+
+        return $this->sendResponse( $orders, 'All products Retrieved  Successfully');
+    }
 }

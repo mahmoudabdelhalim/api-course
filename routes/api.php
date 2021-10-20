@@ -38,7 +38,7 @@ Route::get('show-product/{id}', 'Api\ProductController@single_product');
 Route::post('forgot-password', 'Api\AuthController@forgot_password');
 
 Route::middleware('auth:api')->group(function () {
-
+    Route::get('profile/{id}', 'Api\AuthController@Profile');
     Route::post('change-password', 'Api\AuthController@change_password');
     Route::post('logout', 'Api\AuthController@logout');
     //
@@ -50,6 +50,7 @@ Route::middleware('auth:api')->group(function () {
      Route::post('checkout', 'Api\CartController@checkout');
      Route::post('place-order', 'Api\CartController@order');
      Route::post('promo-code', 'Api\CartController@promo');
+     Route::get('all-order', 'Api\CartController@allOrder');
 
     });
 
