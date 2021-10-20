@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Device;
 use App\Http\Controllers\Api\BaseController;
 use App\Models\Helper;
 use App\User;
@@ -64,6 +65,7 @@ class AuthController extends BaseController
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
+            'device_token' =>'required',
         ]);
 
         if ($validator->fails()) {
@@ -75,7 +77,18 @@ class AuthController extends BaseController
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $user = Auth::user();
                 $user->accessToken = $user->createToken('MyApp')->accessToken;
+//devices
+$device = Device::where('token','=', $request->device_token)->first(); //laravel returns an integer
+$data=[
+    'token'=> $request->device_token,
+    'user_id'=>$user->id,
+];
+if($device) {
+    $device->update($data);
 
+} else {
+    Device::create($data);
+}
                 return $this->sendResponse($user, 'User login successfully.');
             } else {
                 return $this->sendError('Invalid Useremail or Password!');

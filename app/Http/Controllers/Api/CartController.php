@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Device;
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
@@ -10,11 +11,13 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Promo;
-
+use App\FCMHelper as FCMHelper;
 use Validator;
 
 class CartController extends BaseController
 {
+
+
     //cart where status =0
     public function cart()
     {
@@ -148,15 +151,20 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
 
                 ];
                 $order = Order::create($returnData);
-                if ($promo && $promo->status==1) {
-                    $order->copoun=$request->promo;
-                    $order->total=$sumPrice* $promo->value;
+                // if ($promo && $promo->status==1) {
+                //     $order->copoun=$request->promo;
+                //     $order->total=$sumPrice* $promo->value;
                     $order->save();
-                }
+                // }
+                //send notify
+                $device=Device::where('user_id',$user->id)->first();
+                FCMHelper::setNotificationParams('welcome','your order placed');
+                FCMHelper::sendNotifcationToDevice($device->token);
+                //end
                 return $this->sendResponse($order, 'Geting Order successfully.');
-            } else {
-                return $this->sendError('Invalid Order !');
-            }
+         } else {
+                 return $this->sendError('Invalid Order !');
+             }
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error happens!!');
         }
