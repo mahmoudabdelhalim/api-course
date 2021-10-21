@@ -82,6 +82,7 @@ $device = Device::where('token','=', $request->device_token)->first(); //laravel
 $data=[
     'token'=> $request->device_token,
     'user_id'=>$user->id,
+    'status'=>1,
 ];
 if($device) {
     $device->update($data);
