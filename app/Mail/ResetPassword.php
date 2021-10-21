@@ -17,12 +17,12 @@ class ResetPassword extends Mailable
      * @return void
      */
     public $name;
-    public $id;
+    public $token;
 
-    public function __construct($name, $id)
+    public function __construct($name, $token)
     {
         $this->name = $name;
-        $this->id = $id;
+        $this->token = $token;
     }
 
     /**
@@ -33,7 +33,7 @@ class ResetPassword extends Mailable
     public function build()
     {
         $user['name'] = $this->name;
-        $user['id'] = $this->id;
+        $user['token'] = $this->token;
 
         return $this->from("sabreenm312@gmail.com", "Sender Name")
         ->subject('Password Reset Link')
