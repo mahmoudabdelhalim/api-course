@@ -188,10 +188,10 @@ if($device) {
             $user=User::where('email',$request->email)->first();
             Mail::to($request->email)->send(new ResetPassword($user->name, $user->id));
 
-            if(Mail::failures() != 0) {
-                return $this->sendResponse($user, 'User has been send mail');
-            }
-            return $this->sendResponse(null, 'Failed! there is some issue with email provider');
+            // if(Mail::failures() != 0) {
+                 return $this->sendResponse($user, 'User has been send mail');
+            // }
+            // return $this->sendResponse(null, 'Failed! there is some issue with email provider');
 
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error happens!!');
