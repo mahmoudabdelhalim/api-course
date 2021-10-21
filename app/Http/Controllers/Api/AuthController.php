@@ -180,12 +180,13 @@ if($device) {
     if ($validator->fails()) {
         return $this->convertErrorsToString($validator->messages());
     } else {
-        try {
+        // try {
             // $response = Password::sendResetLink($request->only('email'), function (Message $message) {
             //     $message->subject($this->getEmailSubject());
             // });
             // return $this->sendResponse($response, 'User has been send mail');
             $user=User::where('email',$request->email)->first();
+
             Mail::to($request->email)->send(new ResetPassword($user->name, $user->token));
 
             if(Mail::failures() != 0) {
@@ -193,9 +194,9 @@ if($device) {
             }
             return $this->sendResponse(null, 'Failed! there is some issue with email provider');
 
-        } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), 'Error happens!!');
-        }
+        // } catch (\Exception $e) {
+        //     return $this->sendError($e->getMessage(), 'Error happens!!');
+        // }
     }
       return $this->sendResponse(null, 'User has been send mail');
 }
