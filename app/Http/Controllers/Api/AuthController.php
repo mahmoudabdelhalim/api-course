@@ -186,7 +186,7 @@ if($device) {
             // });
             // return $this->sendResponse($response, 'User has been send mail');
             $user=User::where('email',$request->email)->first();
-            Mail::to($request->email)->send(new ResetPassword($user->name, $user->id));
+            Mail::to($request->email)->send(new ResetPassword($user->name, $user->token));
 
             if(Mail::failures() != 0) {
                 return $this->sendResponse($user, 'User has been send mail');
