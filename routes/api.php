@@ -54,6 +54,8 @@ Route::middleware('auth:api')->group(function () {
      Route::post('promo-code', 'Api\CartController@promo');
      Route::get('all-order', 'Api\CartController@allOrder');
 
+  Route::get('off-notify', 'Api\CartController@offNotify');
+  Route::get('on-notify', 'Api\CartController@onNotify');
     });
 
 

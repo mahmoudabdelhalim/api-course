@@ -157,7 +157,7 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
                     $order->save();
                 // }
                 //send notify
-                $device=Device::where('user_id',$user->id)->first();
+                $device=Device::where('user_id',$user->id)->where('status',1)->first();
                 FCMHelper::setNotificationParams('welcome','your order placed');
                 FCMHelper::sendNotifcationToDevice($device->token);
                 //end
@@ -198,5 +198,41 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
         $orders = Order::all();
 
         return $this->sendResponse( $orders, 'All products Retrieved  Successfully');
+    }
+
+    public function offNotify(){
+        $user = Auth::user();
+        $device=Device::where('user_id',$user->id)->first();
+        try
+        {
+
+            if ($device) {
+                $device->update(['status' =>0]);
+                return $this->sendResponse(null, 'notification Off');
+            } else {
+                return $this->sendError('U not have notification  !');
+            }
+
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 'Error happens!!');
+        }
+    }
+
+    public function onNotify(){
+        $user = Auth::user();
+        $device=Device::where('user_id',$user->id)->first();
+        try
+        {
+
+            if ($device) {
+                $device->update(['status' =>1]);
+                return $this->sendResponse(null, 'notification Off');
+            } else {
+                return $this->sendError('U not have notification  !');
+            }
+
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 'Error happens!!');
+        }
     }
 }
