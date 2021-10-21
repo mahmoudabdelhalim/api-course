@@ -14,6 +14,8 @@ use Validator;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\ResetPassword;
+use Illuminate\Support\Facades\Mail;
+
 class AuthController extends BaseController
 {
     /**
