@@ -226,7 +226,7 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
 
             if ($device) {
                 $device->update(['status' =>1]);
-                return $this->sendResponse(null, 'notification Off');
+                return $this->sendResponse(null, 'notification On');
             } else {
                 return $this->sendError('U not have notification  !');
             }
