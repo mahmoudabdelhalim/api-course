@@ -41,4 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function product(){
         return $this->belongsToMany('App\Models\Product','product_rates');
       }
+
+
 }

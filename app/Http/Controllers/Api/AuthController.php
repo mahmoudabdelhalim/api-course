@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Password;
 use Validator;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Hash;
-
+use App\Mail\ResetPassword;
 class AuthController extends BaseController
 {
     /**
@@ -179,10 +179,18 @@ if($device) {
         return $this->convertErrorsToString($validator->messages());
     } else {
         try {
-            $response = Password::sendResetLink($request->only('email'), function (Message $message) {
-                $message->subject($this->getEmailSubject());
-            });
-            return $this->sendResponse($response, 'User has been send mail');
+            // $response = Password::sendResetLink($request->only('email'), function (Message $message) {
+            //     $message->subject($this->getEmailSubject());
+            // });
+            // return $this->sendResponse($response, 'User has been send mail');
+            $user=User::where('email',$request->email)->first();
+            Mail::to($request->email)->send(new ResetPassword($user->name, $user->name));
+
+            if(Mail::failures() != 0) {
+                return $this->sendResponse($user, 'User has been send mail');
+            }
+            return $this->sendResponse(null, 'Failed! there is some issue with email provider');
+
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error happens!!');
         }

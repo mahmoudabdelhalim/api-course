@@ -36,7 +36,9 @@ Route::post('search', 'Api\ProductController@search');
 Route::get('show-product/{id}', 'Api\ProductController@single_product');
 //must login brfore
 Route::post('forgot-password', 'Api\AuthController@forgot_password');
-
+// Route::get('forgot-password',function () {
+//     return view('auth.passwords.reset');
+// });
 Route::middleware('auth:api')->group(function () {
     Route::get('profile/{id}', 'Api\AuthController@Profile');
     Route::post('change-password', 'Api\AuthController@change_password');
