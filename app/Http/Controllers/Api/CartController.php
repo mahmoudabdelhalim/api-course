@@ -12,8 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Promo;
 use App\FCMHelper as FCMHelper;
+use App\Models\Suggestion;
 use Validator;
-
+use Carbon\Carbon;
 class CartController extends BaseController
 {
 
@@ -233,6 +234,32 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
 
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error happens!!');
+        }
+    }
+
+    public function suggest(Request $request){
+        $userid = Auth::user()->id;
+        $input = array(
+            'text' => 'required',
+            'suggest_date' => 'required',
+
+        );
+        $validator = Validator::make($input);
+        if ($validator->fails()) {
+            return $this->convertErrorsToString($validator->messages());
+        } else {
+            try {
+                $data=[
+                    'text'=> $request->text,
+                    'user_id'=>$userid,
+                    'suggest_date'=> Carbon::parse($request->input('suggest_date')),
+                ];
+                Suggestion::create($data);
+                return $this->sendResponse(null, 'U make Suggest successfully.');
+
+            }catch (\Exception $ex){
+                return $this->sendError($ex->getMessage(), 'Error happens!!');
+            }
         }
     }
 }

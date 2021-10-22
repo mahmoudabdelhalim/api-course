@@ -56,6 +56,7 @@ Route::middleware('auth:api')->group(function () {
 
   Route::get('off-notify', 'Api\CartController@offNotify');
   Route::get('on-notify', 'Api\CartController@onNotify');
+  Route::post('make-suggestion', 'Api\CartController@suggest');
     });
 
 
