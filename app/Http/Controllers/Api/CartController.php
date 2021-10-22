@@ -239,16 +239,16 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
 
     public function suggest(Request $request){
         $userid = Auth::user()->id;
-        $input = array(
+
+        $validator = Validator::make($request->all(), [
             'text' => 'required',
             'suggest_date' => 'required',
+        ]);
 
-        );
-        $validator = Validator::make($input);
         if ($validator->fails()) {
             return $this->convertErrorsToString($validator->messages());
-        } else {
-            try {
+        }
+
                 $data=[
                     'text'=> $request->text,
                     'user_id'=>$userid,
@@ -260,6 +260,6 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
             }catch (\Exception $ex){
                 return $this->sendError($ex->getMessage(), 'Error happens!!');
             }
-        }
+
     }
 }
