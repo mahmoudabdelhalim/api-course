@@ -248,7 +248,7 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
         if ($validator->fails()) {
             return $this->convertErrorsToString($validator->messages());
         }
-
+try{
                 $data=[
                     'text'=> $request->text,
                     'user_id'=>$userid,
