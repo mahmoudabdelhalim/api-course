@@ -130,7 +130,7 @@ if($device) {
                 } else {
                     Device::create($data);
                 }
-                return $this->sendResponse($user, 'Uour token update succesfully.');
+                return $this->sendResponse(null, 'your token update succesfully.');
 
             }
 
