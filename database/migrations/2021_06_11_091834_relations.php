@@ -64,6 +64,8 @@ class Relations extends Migration
         //  This is Realations for the carts Table ..
         Schema::table('carts', function (Blueprint $table) {
             $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_size')->references('id')->on('product_sizes');
+            $table->foreign('product_color')->references('id')->on('product_colors');
             $table->foreign('user_id')->references('id')->on('users');
         });
 

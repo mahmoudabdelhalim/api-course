@@ -101,6 +101,44 @@ if($device) {
         }
     }
 
+
+    public function tokenUpdate(Request $request){
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+
+
+        ]);
+
+        if ($validator->fails()) {
+            return $this->convertErrorsToString($validator->messages());
+        }
+
+        try
+        {
+            $user = Auth::user();
+            if ($user) {
+                $device = Device::where('token','=', $request->token)->first(); //laravel returns an integer
+                $data=[
+                    'token'=> $request->token,
+                    'user_id'=>$user->id,
+                    'status'=>1,
+
+                ];
+                if($device) {
+                    $device->update($data);
+
+                } else {
+                    Device::create($data);
+                }
+                return $this->sendResponse($user, 'Uour token update succesfully.');
+
+            }
+
+
+    } catch (\Exception $e) {
+        return $this->sendError($e->getMessage(), 'Error happens!!');
+    }
+    }
     /**
      * logout api
      *

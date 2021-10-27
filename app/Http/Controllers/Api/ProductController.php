@@ -16,7 +16,7 @@ class ProductController extends BaseController
     public function index(){
         $products = Product::all();
 
-        return $this->sendResponse( ProResource::collection($products), 'All products Retrieved  Successfully');
+        return $this->sendResponse(ProductResource::collection($products), 'All products Retrieved  Successfully');
     }
 
 //GET ALL CATEGORIES

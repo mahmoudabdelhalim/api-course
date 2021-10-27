@@ -3,21 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Device;
+use App\FCMHelper as FCMHelper;
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use App\Models\Cart_items;
+use App\Models\Color;
 use App\Models\Order;
+use App\Models\Product_color;
+use App\Models\Product_size;
+use App\Models\Promo;
+use App\Models\Size;
+use App\Models\Suggestion;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Promo;
-use App\FCMHelper as FCMHelper;
-use App\Models\Suggestion;
 use Validator;
-use Carbon\Carbon;
+
 class CartController extends BaseController
 {
-
 
     //cart where status =0
     public function cart()
@@ -25,6 +29,8 @@ class CartController extends BaseController
 
         try
         {
+
+
             $user = Auth::user();
             $cartData = Cart::where('user_id', $user->id)->where('status', "=", 0)->get();
             if ($cartData) {
@@ -40,8 +46,11 @@ class CartController extends BaseController
     public function storeCart(Request $request)
     {
 
+
         $validator = Validator::make($request->all(), [
             'product_id' => 'required',
+            'color' => 'required',
+            'size' => 'required',
 
         ]);
 
@@ -52,10 +61,28 @@ class CartController extends BaseController
         try
         {
             $user = Auth::user();
+            $color=Color::where('colorid', $request->color)->first();
+            $size=Size::where('name', $request->size)->first();
+            if($color){
+                $product_color=Product_color::where([
+                    ['product_id', '=', $request->product_id],
+                    ['color_id', '=', $color->id],
+
+                ])->first();
+            }
+            if($size){
+                $product_size=Product_size::where([
+                    ['product_id', '=', $request->product_id],
+                    ['size_id', '=', $size->id],
+
+                ])->first();
+            }
+
             if ($user) {
                 $data = [
                     'user_id' => $user->id,
-
+'product_size'=>$product_size->id ?? null,
+'product_color'=>$product_color->id ?? null,
                     'product_id' => $request->product_id,
                     'quantity' => 1,
 
@@ -96,7 +123,7 @@ class CartController extends BaseController
             $user = Auth::user();
             $cartData = Cart::where('user_id', $user->id)->where('status', "=", 0)->get();
             if ($cartData) {
-                $ItemsArray =[];
+                $ItemsArray = [];
                 foreach ($cartData as $cart) {
 
                     $data = [
@@ -107,14 +134,14 @@ class CartController extends BaseController
                     ];
 
                     $cartItem = Cart_items::create($data);
-                    array_push($ItemsArray,$cart->product);
+                    array_push($ItemsArray, $cart->product);
                     //update cart
                     $cart->update(['status' => 1]);
                 }
 
-                $returnData=[
-                    'user'=> $user,
-                    'items'=>$ItemsArray,
+                $returnData = [
+                    'user' => $user,
+                    'items' => $ItemsArray,
                 ];
 
                 return $this->sendResponse($returnData, 'Geting Cart successfully.');
@@ -126,52 +153,60 @@ class CartController extends BaseController
         }
     }
 
-    public function order(Request $request){
+    public function order(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'latitude' => 'required|between:-90,90',
+            'longitude' => 'required|between:-180,180'
 
+        ]);
+
+        if ($validator->fails()) {
+            return $this->convertErrorsToString($validator->messages());
+        }
 
         try
         {
-            $promo = Promo::where('promo_key','=',$request->promo)->first();
-
-
+            $promo = Promo::where('promo_key', '=', $request->promo)->first();
 
             $user = Auth::user();
             $cartData = Cart::where('user_id', $user->id)->where('status', "=", 1)->first();
             if ($cartData) {
-                $max =Order::orderby('id','desc')->first();
+                $max = Order::orderby('id', 'desc')->first();
 
-     $max = ($max != null) ? intval($max['order_no']) : 0;
-     $max++;
+                $max = ($max != null) ? intval($max['order_no']) : 0;
+                $max++;
 
-$sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
+                $sumPrice = Cart_items::where('cart_id', $cartData->id)->sum('price');
 
-                $returnData=[
-                    'order_no'=>$max,
-                    'user_id'=> $user->id,
-                    'total'=>$sumPrice,
+                $returnData = [
+                    'order_no' => $max,
+                    'user_id' => $user->id,
+                    'total' => $sumPrice,
 
                 ];
                 $order = Order::create($returnData);
                 // if ($promo && $promo->status==1) {
                 //     $order->copoun=$request->promo;
                 //     $order->total=$sumPrice* $promo->value;
-                    $order->save();
+                $order->save();
                 // }
                 //send notify
-                $device=Device::where('user_id',$user->id)->where('status',1)->first();
-                FCMHelper::setNotificationParams('welcome','your order placed');
+                $device = Device::where('user_id', $user->id)->where('status', 1)->first();
+                FCMHelper::setNotificationParams('welcome', 'your order placed');
                 FCMHelper::sendNotifcationToDevice($device->token);
                 //end
                 return $this->sendResponse($order, 'Geting Order successfully.');
-         } else {
-                 return $this->sendError('Invalid Order !');
-             }
+            } else {
+                return $this->sendError('Invalid Order !');
+            }
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error happens!!');
         }
     }
 
-    public function promo(Request $request){
+    public function promo(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'promo' => 'required',
 
@@ -183,8 +218,8 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
 
         try
         {
-            $promo = Promo::where('promo_key','=',$request->promo)->first();
-            if ($promo && $promo->status==1) {
+            $promo = Promo::where('promo_key', '=', $request->promo)->first();
+            if ($promo && $promo->status == 1) {
 
                 return $this->sendResponse($promo, 'adding promo code to order');
             } else {
@@ -195,20 +230,22 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
             return $this->sendError($e->getMessage(), 'Error happens!!');
         }
     }
-    public function allOrder(){
+    public function allOrder()
+    {
         $orders = Order::all();
 
-        return $this->sendResponse( $orders, 'All products Retrieved  Successfully');
+        return $this->sendResponse($orders, 'All products Retrieved  Successfully');
     }
 
-    public function offNotify(){
+    public function offNotify()
+    {
         $user = Auth::user();
-        $device=Device::where('user_id',$user->id)->first();
+        $device = Device::where('user_id', $user->id)->first();
         try
         {
 
             if ($device) {
-                $device->update(['status' =>0]);
+                $device->update(['status' => 0]);
                 return $this->sendResponse(null, 'notification Off');
             } else {
                 return $this->sendError('U not have notification  !');
@@ -219,14 +256,15 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
         }
     }
 
-    public function onNotify(){
+    public function onNotify()
+    {
         $user = Auth::user();
-        $device=Device::where('user_id',$user->id)->first();
+        $device = Device::where('user_id', $user->id)->first();
         try
         {
 
             if ($device) {
-                $device->update(['status' =>1]);
+                $device->update(['status' => 1]);
                 return $this->sendResponse(null, 'notification On');
             } else {
                 return $this->sendError('U not have notification  !');
@@ -237,7 +275,8 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
         }
     }
 
-    public function suggest(Request $request){
+    public function suggest(Request $request)
+    {
         $userid = Auth::user()->id;
 
         $validator = Validator::make($request->all(), [
@@ -248,18 +287,18 @@ $sumPrice=Cart_items::where('cart_id', $cartData->id)->sum('price');
         if ($validator->fails()) {
             return $this->convertErrorsToString($validator->messages());
         }
-try{
-                $data=[
-                    'text'=> $request->text,
-                    'user_id'=>$userid,
-                    'suggest_date'=> Carbon::parse($request->input('suggest_date')),
-                ];
-                Suggestion::create($data);
-                return $this->sendResponse(null, 'U make Suggest successfully.');
+        try {
+            $data = [
+                'text' => $request->text,
+                'user_id' => $userid,
+                'suggest_date' => Carbon::parse($request->input('suggest_date')),
+            ];
+            Suggestion::create($data);
+            return $this->sendResponse(null, 'U make Suggest successfully.');
 
-            }catch (\Exception $ex){
-                return $this->sendError($ex->getMessage(), 'Error happens!!');
-            }
+        } catch (\Exception $ex) {
+            return $this->sendError($ex->getMessage(), 'Error happens!!');
+        }
 
     }
 }

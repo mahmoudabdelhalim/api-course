@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReviewResource extends JsonResource
@@ -17,12 +18,10 @@ class ReviewResource extends JsonResource
         return [
 
             "rate_no" => $this->rate_no ?? '',
-            'comment'=>$this->comment ?? '',
+            'comment' => $this->comment ?? '',
+            "creat_date" => Carbon::parse($this->created_at),
+            "user" => new UserResource($this->user),
 
-            "user"=>new UserResource($this->user),
-
-
-
-            ];
+        ];
     }
 }

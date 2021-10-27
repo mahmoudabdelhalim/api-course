@@ -16,7 +16,7 @@ class ColorResource extends JsonResource
     {
         return [
 
-            "name" => $this->name !==null ? $this->name : '',
+            "colorid" => $this->colorid !==null ? $this->colorid : '',
 
             ];
     }
