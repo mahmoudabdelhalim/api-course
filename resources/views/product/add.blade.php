@@ -4,7 +4,7 @@
 
 
 @section('crumb')
-    
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="{{ url('/admin') }}"><i class="material-icons"></i> {{ __('home') }} </a></li>
@@ -35,16 +35,16 @@
 				</div>
 				@endif
 
-				
+
 
 				<div class="col-12 p-3">
                   <form action="{{route('product.store')}}" method="POST" enctype="multipart/form-data" >
-             
+
 				  @csrf
                       <div class="ms-auth-container row">
-    
+
                           <div class="col-md-12">
-                        
+
                               <div class="form-group">
                                   <label  >{{ __('Name') }}</label>
                                   <div class="input-group">
@@ -66,11 +66,11 @@
                                          placeholder="discount">
                                   </div>
                               </div>
-                            
+
                               <div class="form-group">
                                   <label  >{{ __('Brand') }}</label>
                                   <div class="input-group">
-                                
+
                                <select name="brand_id" class="form-control" id="">
                                  @foreach($brands as $type)
                                  <option value="{{$type->id}}">{{$type->name}}</option>
@@ -78,11 +78,11 @@
                                </select>
                                   </div>
                               </div>
-                              
+
                               <div class="form-group">
                                   <label  >{{ __('Category') }}</label>
                                   <div class="input-group">
-                                
+
                                <select name="category_id" class="form-control" id="">
 
                                  @foreach($categories as $type)
@@ -91,11 +91,11 @@
                                </select>
                                   </div>
                               </div>
-                              
+
                               <div class="form-group">
                                   <label  >{{ __('Shop') }}</label>
                                   <div class="input-group">
-                                
+
                                <select name="shop_id" class="form-control" id="">
                                @foreach($shops as $type)
                                  <option value="{{$type->id}}">{{$type->name}}</option>
@@ -106,12 +106,12 @@
                               <div class="form-group">
                                   <label  >{{ __('desc') }}</label>
                                   <div class="input-group">
-                                  <textarea class="form-control" name="desc"></textarea>
-                               
+                                  <textarea class="form-control" name="description"></textarea>
+
                                   </div>
                               </div>
                               <div class="form-group">
-                                  
+
                                   <div class="input-group">
                                   <label  >{{ __('Status') }}
                                       <input type="checkbox" id="newTitle" name="status"  value="1" class="form-control"
@@ -120,19 +120,19 @@
                                   </div>
                               </div>
                           </div>
-                         
-                          
+
+
                       </div>
-					
+
                       <div class="input-group d-flex justify-content-end text-center">
-                        <input type="button" value="Cancel" class="btn btn-dark mx-2" data-dismiss="modal" aria-label="Close"> 
-                     
-                        <input type="submit" value="Add" class="btn btn-success ">                       
+                        <input type="button" value="Cancel" class="btn btn-dark mx-2" data-dismiss="modal" aria-label="Close">
+
+                        <input type="submit" value="Add" class="btn btn-success ">
                     </div>
-					
+
                   </form>
               </div>
-	          
+
 			</div>
 		</div>
 	</div>

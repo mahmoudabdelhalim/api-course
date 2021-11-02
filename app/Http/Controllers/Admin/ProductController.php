@@ -131,7 +131,17 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $values = array_except($request->all(), ['_token', 'price_after_discount', 'status']);
+
+        $values['price_after_discount'] = $values['price'] - $values['discount'];
+        if ($request->input('status') == 1) {
+            $values['status'] = 1;
+        } else {
+            $values['status'] = 0;
+        }
+
+        $this->object::findOrFail($id)->update($values);
+        return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
     }
 
     /**
@@ -142,7 +152,20 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $row = Product::where('id', '=', $id)->first();
+
+        try{
+            $row->delete();
+
+
+            }
+            catch(QueryException $q){
+
+                return redirect()->back()->with('flash_danger','You cannot delete related with another...');
+
+            }
+                return redirect()->route($this->routeName.'index')->with('flash_success', 'Data Has Been Deleted Successfully !');
+
     }
 
     /**
