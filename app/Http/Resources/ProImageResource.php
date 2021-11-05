@@ -16,7 +16,7 @@ class ProImageResource extends JsonResource
     {
         return [
 
-            "image" => asset('uploads/product/' . $this->resource->ImageUrl) ?? '',
+            "image" => asset('uploads/product/' . $this->image) ?? '',
             "image_order" => $this->image_order ?? '',
 
             ];
