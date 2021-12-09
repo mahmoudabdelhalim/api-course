@@ -11,6 +11,7 @@ use App\Models\Cart_items;
 use App\Models\Color;
 use App\Models\Order;
 use App\Models\Product_color;
+use App\Models\Product_rate;
 use App\Models\Product_size;
 use App\Models\Promo;
 use App\Models\Size;
@@ -53,7 +54,11 @@ class CartController extends BaseController
             'size' => 'required',
 
         ]);
-
+//exist product
+$exist=Cart::where('product_id',$request->product_id)->first();
+if ($exist) {
+    return $this->sendError('this product already in your cart !');
+}
         if ($validator->fails()) {
             return $this->convertErrorsToString($validator->messages());
         }
@@ -295,6 +300,35 @@ class CartController extends BaseController
             ];
             Suggestion::create($data);
             return $this->sendResponse(null, 'U make Suggest successfully.');
+
+        } catch (\Exception $ex) {
+            return $this->sendError($ex->getMessage(), 'Error happens!!');
+        }
+
+    }
+
+    public function review(Request $request)
+    {
+        $userid = Auth::user()->id;
+
+        $validator = Validator::make($request->all(), [
+            'product_id' => 'required',
+            'rate_no' => 'required',
+            'comment' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->convertErrorsToString($validator->messages());
+        }
+        try {
+            $data = [
+                'product_id' => $request->product_id,
+                'user_id' => $userid,
+                'rate_no' => $request->rate_no,
+                'comment'=> $request->comment,
+            ];
+            Product_rate::create($data);
+            return $this->sendResponse(null, 'U make review successfully.');
 
         } catch (\Exception $ex) {
             return $this->sendError($ex->getMessage(), 'Error happens!!');
