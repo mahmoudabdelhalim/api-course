@@ -131,10 +131,10 @@ public function deleteProduct($id){
 
     } catch (QueryException $q) {
 
-        return redirect()->back()->with('flash_danger', 'You cannot delete related with another...');
+        return $this->sendError($q->getMessage(), 'You cannot delete related with another...');
 
     }
-    return redirect()->back()->with('flash_success', 'Data Has Been Deleted Successfully !');
+    return $this->sendResponse(null, 'Data Has Been Deleted Successfully !.');
 
 
 
