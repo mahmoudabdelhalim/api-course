@@ -60,6 +60,7 @@ Route::middleware('auth:api')->group(function () {
   Route::get('on-notify', 'Api\CartController@onNotify');
   Route::post('make-suggestion', 'Api\CartController@suggest');
   Route::post('make-review', 'Api\CartController@review');
+  Route::post('remove-item/{id}', 'Api\CartController@deleteProduct');
     });
 
 

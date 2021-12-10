@@ -20,7 +20,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
-
+use Illuminate\Database\QueryException;
 class CartController extends BaseController
 {
 
@@ -120,7 +120,25 @@ if ($exist) {
         $row->update(['quantity' => $row->quantity - 1]);
         return $this->sendResponse($row, ' Cart updated successfully.');
     }
+public function deleteProduct($id){
+    $row = Cart::where('product_id', $id)->first();
+    $cartItems=Cart_items::where('cart_id', $id)->get();
+    try {
+        foreach($cartItems as $item){
+            $item->delete();
+        }
+        $row->delete();
 
+    } catch (QueryException $q) {
+
+        return redirect()->back()->with('flash_danger', 'You cannot delete related with another...');
+
+    }
+    return redirect()->back()->with('flash_success', 'Data Has Been Deleted Successfully !');
+
+
+
+}
     public function checkout()
     {
         try
