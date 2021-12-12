@@ -124,9 +124,12 @@ public function deleteProduct($id){
     $row = Cart::where('product_id', $id)->first();
     $cartItems=Cart_items::where('cart_id', $id)->get();
     try {
-        foreach($cartItems as $item){
-            $item->delete();
+        if($cartItems){
+            foreach($cartItems as $item){
+                $item->delete();
+            }
         }
+
         $row->delete();
 
     } catch (QueryException $q) {
