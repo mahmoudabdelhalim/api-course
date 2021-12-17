@@ -126,6 +126,8 @@ class CartController extends BaseController
         // $cartData = Cart::where('user_id', $user->id)->where('status', "=", 0)->get();
 
         $row = Cart::where('product_id', $id)->where('user_id', $user->id)->where('status', "=", 0)->first();
+
+       if($row){
         $cartItems = Cart_items::where('cart_id', $row->id)->get();
         try {
             if ($cartItems) {
@@ -135,13 +137,18 @@ class CartController extends BaseController
             }
 
             $row->delete();
+            return $this->sendResponse(null, 'Data Has Been Deleted Successfully !.');
+
 
         } catch (QueryException $q) {
 
             return $this->sendError($q->getMessage(), 'You cannot delete related with another...');
 
         }
-        return $this->sendResponse(null, 'Data Has Been Deleted Successfully !.');
+       }else{
+        return $this->sendResponse(null, 'Cart not valid!.');
+
+       }
 
     }
     public function checkout()
