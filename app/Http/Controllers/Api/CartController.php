@@ -17,10 +17,11 @@ use App\Models\Promo;
 use App\Models\Size;
 use App\Models\Suggestion;
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
-use Illuminate\Database\QueryException;
+
 class CartController extends BaseController
 {
 
@@ -30,7 +31,6 @@ class CartController extends BaseController
 
         try
         {
-
 
             $user = Auth::user();
             $cartData = Cart::where('user_id', $user->id)->where('status', "=", 0)->get();
@@ -47,7 +47,6 @@ class CartController extends BaseController
     public function storeCart(Request $request)
     {
 
-
         $validator = Validator::make($request->all(), [
             'product_id' => 'required',
             'color' => 'required',
@@ -55,11 +54,11 @@ class CartController extends BaseController
 
         ]);
 //exist product
-$user = Auth::user();
-$exist=Cart::where('product_id',$request->product_id)->where('status', "=", 0)->where('user_id', $user->id)->first();
-if ($exist) {
-    return $this->sendError('this product already in your cart !');
-}
+        $user = Auth::user();
+        $exist = Cart::where('product_id', $request->product_id)->where('status', "=", 0)->where('user_id', $user->id)->first();
+        if ($exist) {
+            return $this->sendError('this product already in your cart !');
+        }
         if ($validator->fails()) {
             return $this->convertErrorsToString($validator->messages());
         }
@@ -67,17 +66,17 @@ if ($exist) {
         try
         {
             $user = Auth::user();
-            $color=Color::where('colorid', $request->color)->first();
-            $size=Size::where('name', $request->size)->first();
-            if($color){
-                $product_color=Product_color::where([
+            $color = Color::where('colorid', $request->color)->first();
+            $size = Size::where('name', $request->size)->first();
+            if ($color) {
+                $product_color = Product_color::where([
                     ['product_id', '=', $request->product_id],
                     ['color_id', '=', $color->id],
 
                 ])->first();
             }
-            if($size){
-                $product_size=Product_size::where([
+            if ($size) {
+                $product_size = Product_size::where([
                     ['product_id', '=', $request->product_id],
                     ['size_id', '=', $size->id],
 
@@ -87,8 +86,8 @@ if ($exist) {
             if ($user) {
                 $data = [
                     'user_id' => $user->id,
-'product_size'=>$product_size->id ?? null,
-'product_color'=>$product_color->id ?? null,
+                    'product_size' => $product_size->id ?? null,
+                    'product_color' => $product_color->id ?? null,
                     'product_id' => $request->product_id,
                     'quantity' => 1,
 
@@ -121,28 +120,30 @@ if ($exist) {
         $row->update(['quantity' => $row->quantity - 1]);
         return $this->sendResponse($row, ' Cart updated successfully.');
     }
-public function deleteProduct($id){
-    $row = Cart::where('product_id', $id)->first();
-    $cartItems=Cart_items::where('cart_id', $id)->get();
-    try {
-        if($cartItems){
-            foreach($cartItems as $item){
-                $item->delete();
+    public function deleteProduct($id)
+    {
+        $user = Auth::user();
+        // $cartData = Cart::where('user_id', $user->id)->where('status', "=", 0)->get();
+
+        $row = Cart::where('product_id', $id)->where('user_id', $user->id)->where('status', "=", 0)->first();
+        $cartItems = Cart_items::where('cart_id', $row->id)->get();
+        try {
+            if ($cartItems) {
+                foreach ($cartItems as $item) {
+                    $item->delete();
+                }
             }
+
+            $row->delete();
+
+        } catch (QueryException $q) {
+
+            return $this->sendError($q->getMessage(), 'You cannot delete related with another...');
+
         }
-
-        $row->delete();
-
-    } catch (QueryException $q) {
-
-        return $this->sendError($q->getMessage(), 'You cannot delete related with another...');
+        return $this->sendResponse(null, 'Data Has Been Deleted Successfully !.');
 
     }
-    return $this->sendResponse(null, 'Data Has Been Deleted Successfully !.');
-
-
-
-}
     public function checkout()
     {
         try
@@ -184,7 +185,7 @@ public function deleteProduct($id){
     {
         $validator = Validator::make($request->all(), [
             'latitude' => 'required|between:-90,90',
-            'longitude' => 'required|between:-180,180'
+            'longitude' => 'required|between:-180,180',
 
         ]);
 
@@ -347,7 +348,7 @@ public function deleteProduct($id){
                 'product_id' => $request->product_id,
                 'user_id' => $userid,
                 'rate_no' => $request->rate_no,
-                'comment'=> $request->comment,
+                'comment' => $request->comment,
             ];
             Product_rate::create($data);
             return $this->sendResponse(null, 'U make review successfully.');
