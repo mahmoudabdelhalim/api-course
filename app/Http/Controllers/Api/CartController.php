@@ -125,7 +125,7 @@ class CartController extends BaseController
         $user = Auth::user();
         // $cartData = Cart::where('user_id', $user->id)->where('status', "=", 0)->get();
 
-        $row = Cart::where('product_id', $id)->where('user_id', $user->id)->where('status', "=", 0)->first();
+        $row = Cart::where('product_id', $id)->where('user_id', $user->id)->first();
 
        if($row){
         $cartItems = Cart_items::where('cart_id', $row->id)->get();
