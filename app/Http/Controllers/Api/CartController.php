@@ -55,7 +55,8 @@ class CartController extends BaseController
 
         ]);
 //exist product
-$exist=Cart::where('product_id',$request->product_id)->first();
+$user = Auth::user();
+$exist=Cart::where('product_id',$request->product_id)->where('status', "=", 0)->where('user_id', $user->id)->first();
 if ($exist) {
     return $this->sendError('this product already in your cart !');
 }
